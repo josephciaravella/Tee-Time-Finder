@@ -1,29 +1,16 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
-
 package joseph.ciaravella.TeeTimeFinder.model;
 
-// line 14 "../../model.ump"
-// line 56 "../../model.ump"
+import jakarta.persistence.*;
+
+@Entity
+@DiscriminatorValue("CUSTOMER")
 public class CustomerAccount extends UserAccount
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public CustomerAccount(int aId, String aEmail, String aPassword)
+  public CustomerAccount(String aEmail, String aPassword, Integer aId)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword, aId);
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public void delete()
   {

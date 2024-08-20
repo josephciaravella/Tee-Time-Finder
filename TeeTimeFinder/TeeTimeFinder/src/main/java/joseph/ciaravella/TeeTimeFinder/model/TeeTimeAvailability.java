@@ -1,51 +1,42 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.34.0.7242.6b8819789 modeling language!*/
-
 package joseph.ciaravella.TeeTimeFinder.model;
-import java.sql.Time;
-import java.sql.Date;
 
-// line 24 "../../model.ump"
-// line 66 "../../model.ump"
+import java.sql.Date;
+import java.sql.Time;
+
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "teetimeavailability")
 public class TeeTimeAvailability
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //TeeTimeAvailability Attributes
-  private int id;
+  @Id
+  @GeneratedValue
+  private Integer id;
   private String clubName;
   private String courseName;
-  private Time availableTeeTime;
   private Date date;
+  private Time time;
 
-  //TeeTimeAvailability Associations
+
   private CourseAdminAccount courseAdminAccount;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public TeeTimeAvailability(int aId, String aClubName, String aCourseName, Time aAvailableTeeTime, Date aDate, CourseAdminAccount aCourseAdminAccount)
+  public TeeTimeAvailability(Integer aId, String aClubName, String aCourseName, Date aDate, Time aTime, CourseAdminAccount aCourseAdminAccount)
   {
     id = aId;
     clubName = aClubName;
     courseName = aCourseName;
-    availableTeeTime = aAvailableTeeTime;
     date = aDate;
+    time = aTime;
     if (!setCourseAdminAccount(aCourseAdminAccount))
     {
       throw new RuntimeException("Unable to create TeeTimeAvailability due to aCourseAdminAccount. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
 
-  public boolean setId(int aId)
+  public boolean setId(Integer aId)
   {
     boolean wasSet = false;
     id = aId;
@@ -69,14 +60,6 @@ public class TeeTimeAvailability
     return wasSet;
   }
 
-  public boolean setAvailableTeeTime(Time aAvailableTeeTime)
-  {
-    boolean wasSet = false;
-    availableTeeTime = aAvailableTeeTime;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setDate(Date aDate)
   {
     boolean wasSet = false;
@@ -85,36 +68,14 @@ public class TeeTimeAvailability
     return wasSet;
   }
 
-  public int getId()
+  public boolean setTime(Time aTime)
   {
-    return id;
+    boolean wasSet = false;
+    time = aTime;
+    wasSet = true;
+    return wasSet;
   }
 
-  public String getClubName()
-  {
-    return clubName;
-  }
-
-  public String getCourseName()
-  {
-    return courseName;
-  }
-
-  public Time getAvailableTeeTime()
-  {
-    return availableTeeTime;
-  }
-
-  public Date getDate()
-  {
-    return date;
-  }
-  /* Code from template association_GetOne */
-  public CourseAdminAccount getCourseAdminAccount()
-  {
-    return courseAdminAccount;
-  }
-  /* Code from template association_SetUnidirectionalOne */
   public boolean setCourseAdminAccount(CourseAdminAccount aNewCourseAdminAccount)
   {
     boolean wasSet = false;
@@ -125,6 +86,20 @@ public class TeeTimeAvailability
     }
     return wasSet;
   }
+
+  
+  public Integer getId() { return id; }
+
+  public String getClubName() { return clubName; }
+
+  public String getCourseName() { return courseName; }
+
+  public Date getDate() { return date; }
+
+  public Time getTime() { return time; }
+  
+  public CourseAdminAccount getCourseAdminAccount() { return courseAdminAccount; }
+
 
   public void delete()
   {
@@ -138,8 +113,8 @@ public class TeeTimeAvailability
             "id" + ":" + getId()+ "," +
             "clubName" + ":" + getClubName()+ "," +
             "courseName" + ":" + getCourseName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "availableTeeTime" + "=" + (getAvailableTeeTime() != null ? !getAvailableTeeTime().equals(this)  ? getAvailableTeeTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "time" + "=" + (getTime() != null ? !getTime().equals(this)  ? getTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "courseAdminAccount = "+(getCourseAdminAccount()!=null?Integer.toHexString(System.identityHashCode(getCourseAdminAccount())):"null");
   }
 }
