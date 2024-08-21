@@ -7,9 +7,11 @@ import jakarta.persistence.*;
 public class CustomerAccount extends UserAccount
 {
 
-  public CustomerAccount(String aEmail, String aPassword, Integer aId)
+  public CustomerAccount() { super(); }
+
+  public CustomerAccount(String aEmail, String aPassword)
   {
-    super(aEmail, aPassword, aId);
+    super(aEmail, aPassword);
   }
 
   public void delete()

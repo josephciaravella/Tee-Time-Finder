@@ -26,6 +26,7 @@ public class Booking
   @JoinColumn(name = "tee_time_availability_id")
   private TeeTimeAvailability teeTimeAvailability;
 
+  public Booking() {}
 
   public Booking(Date aBookingDate, CustomerAccount aCustomerAccount, TeeTimeAvailability aTeeTimeAvailability)
   {
@@ -99,12 +100,12 @@ public class Booking
   }
 
 
-  public String toString()
-  {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "bookingDate" + "=" + (getBookingDate() != null ? !getBookingDate().equals(this)  ? getBookingDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "customerAccount = "+(getCustomerAccount()!=null?Integer.toHexString(System.identityHashCode(getCustomerAccount())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "teeTimeAvailability = "+(getTeeTimeAvailability()!=null?Integer.toHexString(System.identityHashCode(getTeeTimeAvailability())):"null");
-  }
+  // public String toString()
+  // {
+  //   return super.toString() + "["+
+  //           "id" + ":" + getId()+ "]" + System.getProperties().getProperty("line.separator") +
+  //           "  " + "bookingDate" + "=" + (getBookingDate() != null ? !getBookingDate().equals(this)  ? getBookingDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+  //           "  " + "customerAccount = "+(getCustomerAccount()!=null?Integer.toHexString(System.identityHashCode(getCustomerAccount())):"null") + System.getProperties().getProperty("line.separator") +
+  //           "  " + "teeTimeAvailability = "+(getTeeTimeAvailability()!=null?Integer.toHexString(System.identityHashCode(getTeeTimeAvailability())):"null");
+  // }
 }

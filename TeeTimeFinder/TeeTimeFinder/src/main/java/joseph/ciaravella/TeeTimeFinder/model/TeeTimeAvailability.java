@@ -19,9 +19,11 @@ public class TeeTimeAvailability
   private Date date;
   private Time time;
 
-
+  @ManyToOne
   private CourseAdminAccount courseAdminAccount;
 
+  public TeeTimeAvailability() {}
+  
   public TeeTimeAvailability(Integer aId, String aClubName, String aCourseName, Date aDate, Time aTime, CourseAdminAccount aCourseAdminAccount)
   {
     id = aId;
@@ -87,7 +89,7 @@ public class TeeTimeAvailability
     return wasSet;
   }
 
-  
+
   public Integer getId() { return id; }
 
   public String getClubName() { return clubName; }
@@ -107,14 +109,14 @@ public class TeeTimeAvailability
   }
 
 
-  public String toString()
-  {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "clubName" + ":" + getClubName()+ "," +
-            "courseName" + ":" + getCourseName()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "time" + "=" + (getTime() != null ? !getTime().equals(this)  ? getTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "courseAdminAccount = "+(getCourseAdminAccount()!=null?Integer.toHexString(System.identityHashCode(getCourseAdminAccount())):"null");
-  }
+  // public String toString()
+  // {
+  //   return super.toString() + "["+
+  //           "id" + ":" + getId()+ "," +
+  //           "clubName" + ":" + getClubName()+ "," +
+  //           "courseName" + ":" + getCourseName()+ "]" + System.getProperties().getProperty("line.separator") +
+  //           "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+  //           "  " + "time" + "=" + (getTime() != null ? !getTime().equals(this)  ? getTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+  //           "  " + "courseAdminAccount = "+(getCourseAdminAccount()!=null?Integer.toHexString(System.identityHashCode(getCourseAdminAccount())):"null");
+  // }
 }

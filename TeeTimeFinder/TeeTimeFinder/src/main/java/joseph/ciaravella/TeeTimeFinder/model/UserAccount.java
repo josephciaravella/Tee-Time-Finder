@@ -16,12 +16,12 @@ public class UserAccount
   @GeneratedValue
   private Integer id;
 
+  public UserAccount() {}
 
-  public UserAccount(String aEmail, String aPassword, Integer aId)
+  public UserAccount(String aEmail, String aPassword)
   {
     email = aEmail;
     password = aPassword;
-    id = aId;
   }
 
 

@@ -7,9 +7,11 @@ import jakarta.persistence.*;
 public class CourseAdminAccount extends UserAccount
 {
 
-  public CourseAdminAccount(String aEmail, String aPassword, Integer aId)
+  public CourseAdminAccount() { super(); }
+
+  public CourseAdminAccount(String aEmail, String aPassword)
   {
-    super(aEmail, aPassword, aId);
+    super(aEmail, aPassword);
   }
 
   public void delete()
