@@ -18,19 +18,21 @@ public class TeeTimeAvailability
   private String courseName;
   private Date date;
   private Time time;
+  private Integer numOfGolfers;
 
   @ManyToOne
   private CourseAdminAccount courseAdminAccount;
 
   public TeeTimeAvailability() {}
   
-  public TeeTimeAvailability(Integer aId, String aClubName, String aCourseName, Date aDate, Time aTime, CourseAdminAccount aCourseAdminAccount)
+  public TeeTimeAvailability(Integer aId, String aClubName, String aCourseName, Date aDate, Time aTime, Integer aNumOfGolfers, CourseAdminAccount aCourseAdminAccount)
   {
     id = aId;
     clubName = aClubName;
     courseName = aCourseName;
     date = aDate;
     time = aTime;
+    numOfGolfers = aNumOfGolfers;
     if (!setCourseAdminAccount(aCourseAdminAccount))
     {
       throw new RuntimeException("Unable to create TeeTimeAvailability due to aCourseAdminAccount. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -78,6 +80,14 @@ public class TeeTimeAvailability
     return wasSet;
   }
 
+  public boolean setNumOfGolfers(Integer aNumOfGolfers)
+  {
+    boolean wasSet = false;
+    numOfGolfers = aNumOfGolfers;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setCourseAdminAccount(CourseAdminAccount aNewCourseAdminAccount)
   {
     boolean wasSet = false;
@@ -99,6 +109,8 @@ public class TeeTimeAvailability
   public Date getDate() { return date; }
 
   public Time getTime() { return time; }
+
+  public Integer getNumOfGolfers() { return numOfGolfers; }
   
   public CourseAdminAccount getCourseAdminAccount() { return courseAdminAccount; }
 
