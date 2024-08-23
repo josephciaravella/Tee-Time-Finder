@@ -18,9 +18,9 @@ public interface BookingRepository extends CrudRepository<Booking, BookingId> {
     Optional<List<Booking>> findByTeeTimeAvailability(TeeTimeAvailability aTeeTimeAvailability);
     Optional<List<Booking>> findByBookingDate(Date aBookingDate);
 
-    @Query("SELECT b FROM Booking WHERE " +
-            "(:dateLow is null or t.date >= :dateLow) and " +
-            "(:dateHigh is null or t.date <= :dateHigh)")
+    @Query("SELECT b FROM Booking b WHERE " +
+            "(:dateLow is null or b.bookingDate >= :dateLow) and " +
+            "(:dateHigh is null or b.bookingDate <= :dateHigh)")
 
     Optional<List<Booking>> findByFilters(
         @Param("dateLow") Date dateLow,

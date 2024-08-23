@@ -25,9 +25,8 @@ public class TeeTimeAvailability
 
   public TeeTimeAvailability() {}
   
-  public TeeTimeAvailability(Integer aId, String aClubName, String aCourseName, Date aDate, Time aTime, Integer aNumOfGolfers, CourseAdminAccount aCourseAdminAccount)
+  public TeeTimeAvailability(String aClubName, String aCourseName, Date aDate, Time aTime, Integer aNumOfGolfers, CourseAdminAccount aCourseAdminAccount)
   {
-    id = aId;
     clubName = aClubName;
     courseName = aCourseName;
     date = aDate;

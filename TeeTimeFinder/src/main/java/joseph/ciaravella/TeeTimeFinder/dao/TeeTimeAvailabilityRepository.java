@@ -16,14 +16,17 @@ public interface TeeTimeAvailabilityRepository extends CrudRepository<TeeTimeAva
     Optional<List<TeeTimeAvailability>> findByCourseName(String courseName);
     Optional<List<TeeTimeAvailability>> findByTime(Time time);
     Optional<List<TeeTimeAvailability>> findByDate(Date date);
+    Optional<List<TeeTimeAvailability>> findByNumOfGolfers(Integer numOfGolfers);
 
-    @Query("SELECT t FROM TeeTimeAvailability WHERE " +
+    @Query("SELECT t FROM TeeTimeAvailability t WHERE " +
+            "(:golfers is null or t.numOfGolfers <= :golfers) and " +
             "(:timeLow is null or t.time >= :timeLow) and " +
             "(:timeHigh is null or t.time <= :timeHigh) and " +
             "(:dateLow is null or t.date >= :dateLow) and " +
             "(:dateHigh is null or t.date <= :dateHigh)")
 
     Optional<List<TeeTimeAvailability>> findByFilters(
+        @Param("golfers") Integer numOfGolfers,
         @Param("timeLow") Time timeLow,
         @Param("timeHigh") Time timeHigh,
         @Param("dateLow") Date dateLow,
