@@ -1,23 +1,30 @@
 package joseph.ciaravella.TeeTimeFinder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Optional;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import joseph.ciaravella.TeeTimeFinder.dao.BookingRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.CourseAdminAccountRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.CustomerAccountRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.TeeTimeAvailabilityRepository;
+import joseph.ciaravella.TeeTimeFinder.model.Booking;
 import joseph.ciaravella.TeeTimeFinder.model.CourseAdminAccount;
+import joseph.ciaravella.TeeTimeFinder.model.CustomerAccount;
 import joseph.ciaravella.TeeTimeFinder.model.TeeTimeAvailability;
 
 @SpringBootTest
@@ -49,6 +56,7 @@ public class TeeTimeAvailabilityRepositoryTests {
     public void testPersistandLoadTeeTimeAvailability() {
 
         CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        courseAdminAccountRepository.save(testCourseAdmin);
         Date date = Date.valueOf("2024-08-18");
         Time time = Time.valueOf("10:00:00");
         String clubName = "Parcours du Cerf";
@@ -74,6 +82,53 @@ public class TeeTimeAvailabilityRepositoryTests {
 
     @Test
     public void testDeleteTeeTimeAvailabilityWithoutBooking() {
-        
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        courseAdminAccountRepository.save(testCourseAdmin);
+
+        Date date = Date.valueOf("2024-08-18");
+        Time time = Time.valueOf("10:00:00");
+        String clubName = "Parcours du Cerf";
+        String courseName = "Course 1";
+        Integer numOfGolfers = 4;
+
+        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(clubName, courseName, date, time, numOfGolfers, testCourseAdmin);
+
+        teeTimeAvailabilityRepository.save(testTeeTimeAvailability);
+
+        Integer generatedID = testTeeTimeAvailability.getId();
+
+        teeTimeAvailabilityRepository.deleteById(generatedID);
+
+        Optional<TeeTimeAvailability> deletedTeeTimeAvailability = teeTimeAvailabilityRepository.findById(testTeeTimeAvailability.getId());
+
+        assertFalse(deletedTeeTimeAvailability.isPresent(), TeeTimeAvailability.class.getSimpleName() + "was not deleted successfully");
+    }
+
+    @Test
+    public void testDeleteTeeTimeAvailabilityWithBooking() {
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        courseAdminAccountRepository.save(testCourseAdmin);
+        Date date = Date.valueOf("2024-08-18");
+        Time time = Time.valueOf("10:00:00");
+        String clubName = "Parcours du Cerf";
+        String courseName = "Course 1";
+        Integer numOfGolfers = 4;
+
+        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(clubName, courseName, date, time, numOfGolfers, testCourseAdmin);
+
+        teeTimeAvailabilityRepository.save(testTeeTimeAvailability);
+
+        CustomerAccount testCustomer = new CustomerAccount("joseph@gmail.com", "obama");
+        customerAccountRepository.save(testCustomer);
+
+        Booking testBooking = new Booking(Date.valueOf(LocalDate.now()), testCustomer, testTeeTimeAvailability);
+        bookingRepository.save(testBooking);
+
+        Integer generatedTeeTimeAvailabilityID = testTeeTimeAvailability.getId();
+
+        assertThrows(DataIntegrityViolationException.class, () -> teeTimeAvailabilityRepository.deleteById(generatedTeeTimeAvailabilityID));
+
+        Optional<TeeTimeAvailability> notDeletedAvailability = teeTimeAvailabilityRepository.findById(generatedTeeTimeAvailabilityID);
+        assertTrue(notDeletedAvailability.isPresent(), TeeTimeAvailability.class.getSimpleName() + "was deleted when it should not have been");
     }
 }
