@@ -7,25 +7,25 @@ import jakarta.persistence.*;
 public class CourseAdminAccount extends UserAccount
 {
 
-  private String associatedCourse;
+  private String associatedClub;
 
   public CourseAdminAccount() { super(); }
 
-  public CourseAdminAccount(String aEmail, String aPassword, String aAssociatedCourse)
+  public CourseAdminAccount(String aEmail, String aPassword, String aAssociatedClub)
   {
     super(aEmail, aPassword);
-    this.associatedCourse = aAssociatedCourse;
+    this.associatedClub = aAssociatedClub;
   }
 
-  public boolean setAssociatedCourse(String aAssociatedCourse) {
+  public boolean setassociatedClub(String aAssociatedClub) {
     boolean wasSet = false;
-    this.associatedCourse = aAssociatedCourse;
+    this.associatedClub = aAssociatedClub;
     wasSet = true;
     return wasSet;
   }
 
-  public String getAssociatedCourse() {
-    return this.associatedCourse;
+  public String getAssociatedClub() {
+    return this.associatedClub;
   }
 
   public void delete()
