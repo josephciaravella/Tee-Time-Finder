@@ -55,11 +55,11 @@ public class TeeTimeAvailabilityRepositoryTests {
     @Test
     public void testPersistandLoadTeeTimeAvailability() {
 
-        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber", "Parcours du Cerf");
         courseAdminAccountRepository.save(testCourseAdmin);
         Date date = Date.valueOf("2024-08-18");
         Time time = Time.valueOf("10:00:00");
-        String clubName = "Parcours du Cerf";
+        String clubName = testCourseAdmin.getAssociatedClub();
         String courseName = "Course 1";
         Integer numOfGolfers = 4;
 
@@ -82,12 +82,12 @@ public class TeeTimeAvailabilityRepositoryTests {
 
     @Test
     public void testDeleteTeeTimeAvailabilityWithoutBooking() {
-        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber", "Parcours du cerf");
         courseAdminAccountRepository.save(testCourseAdmin);
 
         Date date = Date.valueOf("2024-08-18");
         Time time = Time.valueOf("10:00:00");
-        String clubName = "Parcours du Cerf";
+        String clubName = testCourseAdmin.getAssociatedClub();
         String courseName = "Course 1";
         Integer numOfGolfers = 4;
 
@@ -106,11 +106,11 @@ public class TeeTimeAvailabilityRepositoryTests {
 
     @Test
     public void testDeleteTeeTimeAvailabilityWithBooking() {
-        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber");
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("joseph@bouba.com", "bouber", "Parcours du Cerf");
         courseAdminAccountRepository.save(testCourseAdmin);
         Date date = Date.valueOf("2024-08-18");
         Time time = Time.valueOf("10:00:00");
-        String clubName = "Parcours du Cerf";
+        String clubName = testCourseAdmin.getAssociatedClub();
         String courseName = "Course 1";
         Integer numOfGolfers = 4;
 

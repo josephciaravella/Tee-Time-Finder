@@ -50,12 +50,12 @@ public class BookingRepositoryTests {
 
     @Test
     public void testPersistandLoadBooking() {
-        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("jer@prism.com", "hihihi");
+        CourseAdminAccount testCourseAdmin = new CourseAdminAccount("jer@prism.com", "hihihi", "Club de golf Terrebonne");
         courseAdminAccountRepository.save(testCourseAdmin);
 
         Date testDate = Date.valueOf("2024-08-22");
         Time testTime = Time.valueOf("8:30:00");
-        String testClubName = "Club de golf Terrebonne";
+        String testClubName = testCourseAdmin.getAssociatedClub();
         String testCourseName = "Course 2";
         Integer testNumOfGolfers = 2;
         TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(testClubName, testCourseName, testDate, testTime, testNumOfGolfers, testCourseAdmin);

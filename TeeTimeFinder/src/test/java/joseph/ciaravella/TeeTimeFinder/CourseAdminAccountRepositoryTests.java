@@ -31,8 +31,9 @@ public class CourseAdminAccountRepositoryTests {
 
         String testEmail = "waymond@parcours.com";
         String testPassword = "cerf";
+        String testAssociatedClub = "Parcours du cerf";
 
-        CourseAdminAccount testCourseAdminAccount = new CourseAdminAccount(testEmail, testPassword);
+        CourseAdminAccount testCourseAdminAccount = new CourseAdminAccount(testEmail, testPassword, testAssociatedClub);
 
         courseAdminAccountRepository.save(testCourseAdminAccount);
 
@@ -41,6 +42,7 @@ public class CourseAdminAccountRepositoryTests {
         assertNotNull(testCourseAdminAccount = (CourseAdminAccount) readCourseAdmin.orElse(null));
         assertEquals(testEmail, testCourseAdminAccount.getEmail());
         assertEquals(testPassword, testCourseAdminAccount.getPassword());
+        assertEquals(testAssociatedClub, testCourseAdminAccount.getAssociatedClub());
     }
     
 }
