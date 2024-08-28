@@ -17,7 +17,7 @@ public class CourseAdminAccount extends UserAccount
     this.associatedClub = aAssociatedClub;
   }
 
-  public boolean setassociatedClub(String aAssociatedClub) {
+  public boolean setAssociatedClub(String aAssociatedClub) {
     boolean wasSet = false;
     this.associatedClub = aAssociatedClub;
     wasSet = true;
