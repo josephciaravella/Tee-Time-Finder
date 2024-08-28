@@ -12,6 +12,7 @@ public class UserAccount
   //UserAccount Attributes
   private String email;
   private String password;
+  private String token;
   @Id
   @GeneratedValue
   private Integer id;
@@ -25,35 +26,23 @@ public class UserAccount
   }
 
 
-  public boolean setEmail(String aEmail)
-  {
-    boolean wasSet = false;
-    email = aEmail;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setEmail(String aEmail) { this.email = aEmail; }
 
-  public boolean setPassword(String aPassword)
-  {
-    boolean wasSet = false;
-    password = aPassword;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setPassword(String aPassword) {this.password = aPassword; }
 
-  public boolean setId(Integer aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setId(Integer aId) { this.id = aId; }
 
-  public String getEmail() { return email; }
+  public void setToken(String aToken) { this.token = aToken; }
 
-  public String getPassword() { return password; }
 
-  public Integer getId() { return id; }
+  public String getEmail() { return this.email; }
+
+  public String getPassword() { return this.password; }
+
+  public Integer getId() { return this.id; }
+
+  public String getToken() { return this.token; }
+
 
   public void delete(){}
 
