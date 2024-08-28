@@ -41,6 +41,8 @@ public class UserAccountRepositoryTests {
 
         CourseAdminAccount testCourseAdmin = new CourseAdminAccount(testCourseAdminEmail, testCourseAdminPassword, testAssociatedClub);
 
+        // testCustomer.setToken(tokenP);
+
         userAccountRepository.save(testCustomer);
         userAccountRepository.save(testCourseAdmin);
 
