@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "userAccounts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE")
-public class UserAccount
-{
+public class UserAccount {
 
   //UserAccount Attributes
   private String email;
