@@ -1,5 +1,11 @@
 package joseph.ciaravella.TeeTimeFinder.model;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,6 +14,10 @@ public class CourseAdminAccount extends UserAccount
 {
 
   private String associatedClub;
+
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+  }
 
   public CourseAdminAccount() { super(); }
 
