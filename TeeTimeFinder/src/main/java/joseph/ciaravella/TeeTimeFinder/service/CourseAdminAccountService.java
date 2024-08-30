@@ -20,15 +20,15 @@ public class CourseAdminAccountService {
 
     @Transactional
     public CourseAdminAccount createCourseAdminAccount(String email, String password, String associatedClub) {
-        if (email == null) {
+        if (email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email field cannot be left blank!");
         }
 
-        if (password == null) {
+        if (password.trim().isEmpty()) {
             throw new IllegalArgumentException("Password field cannot be left blank!");
         }
 
-        if (associatedClub == null) {
+        if (associatedClub.trim().isEmpty()) {
             throw new IllegalArgumentException("Associated Club field cannot be left blank!");
         }
 
@@ -46,19 +46,24 @@ public class CourseAdminAccountService {
     }
 
     @Transactional
-    public void updateCourseAdminEmail(String oldEmail, String newEmail) {
+    public void updateCourseAdminEmail(String newEmail, String token) {
         
-        if (newEmail == null) {
+        CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByToken(token).orElse(null);
+        if (courseAdmin == null) {
+            throw new IllegalArgumentException("No course admin found with this email!");
+        }
+
+        if (newEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("New email field cannot be left blank!");
         }
 
-        if (newEmail.equals(oldEmail)) {
-            throw new IllegalArgumentException("Old email cannot be the same as new email!");           
+        if (newEmail.equals(courseAdmin.getEmail())) {
+            throw new IllegalArgumentException("New email cannot be the same as the current email!");           
         }
 
-        CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByEmail(oldEmail).orElse(null);
-        if (courseAdmin == null) {
-            throw new IllegalArgumentException("No course admin found with this email!");
+        CourseAdminAccount existingCourseAdmin = courseAdminAccountRepository.findByEmail(newEmail).orElse(null);
+        if (existingCourseAdmin != null) {
+            throw new IllegalArgumentException("This email is already in use!");
         }
 
         courseAdmin.setEmail(newEmail);
@@ -66,19 +71,18 @@ public class CourseAdminAccountService {
     }
 
     @Transactional
-    public void updateCourseAdminPassword(String token, String oldPassword, String newPassword) {
-        
-        if (newPassword == null) {
-            throw new IllegalArgumentException("New password field cannot be left blank!");
-        }
-
-        if (newPassword.equals(oldPassword)) {
-            throw new IllegalArgumentException("Old password cannot be the same as new password!");           
-        }
-
+    public void updateCourseAdminPassword(String token, String newPassword) {
         CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByToken(token).orElse(null);
         if (courseAdmin == null) {
             throw new IllegalArgumentException("No course admin found with this email!");
+        }
+
+        if (newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("New password field cannot be left blank!");
+        }
+
+        if (newPassword.equals(courseAdmin.getPassword())) {
+            throw new IllegalArgumentException("Old password cannot be the same as new password!");           
         }
 
         courseAdmin.setPassword(newPassword);
@@ -86,19 +90,18 @@ public class CourseAdminAccountService {
     }
 
     @Transactional
-    public void updateCourseAdminAssociatedClub(String token, String oldClub, String newClub) {
-        
-        if (newClub == null) {
-            throw new IllegalArgumentException("New club field cannot be left blank!");
-        }
-
-        if (newClub.equals(oldClub)) {
-            throw new IllegalArgumentException("Old club cannot be the same as new club!");           
-        }
-
+    public void updateCourseAdminAssociatedClub(String token, String newClub) {
         CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByToken(token).orElse(null);
         if (courseAdmin == null) {
             throw new IllegalArgumentException("No course admin found with this email!");
+        }
+
+        if (newClub.trim().isEmpty()) {
+            throw new IllegalArgumentException("New club field cannot be left blank!");
+        }
+
+        if (newClub.equals(courseAdmin.getAssociatedClub())) {
+            throw new IllegalArgumentException("Old club cannot be the same as new club!");           
         }
 
         courseAdmin.setAssociatedClub(newClub);
@@ -107,7 +110,7 @@ public class CourseAdminAccountService {
 
     @Transactional
     public void deleteCourseAdminByEmail(String email) {
-        if (email == null) {
+        if (email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email field cannot be left blank!");
         }
 
@@ -120,7 +123,25 @@ public class CourseAdminAccountService {
     }
 
     @Transactional
+    public void deleteCourseAdminByToken(String token) {
+        if (token.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email field cannot be left blank!");
+        }
+
+        CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByToken(token).orElse(null);
+        if (courseAdmin == null) {
+            throw new IllegalArgumentException("No course admin found with this email!");
+        }
+
+        courseAdminAccountRepository.delete(courseAdmin);
+    }
+
+    @Transactional
     public CourseAdminAccount getCourseAdminAccountByEmail(String email) {
+        if (email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email field cannot be left blank!");
+        }
+        
         CourseAdminAccount courseAdmin = courseAdminAccountRepository.findByEmail(email).orElse(null);
         if (courseAdmin == null) {
             throw new IllegalArgumentException("No course admin found with this email!");
