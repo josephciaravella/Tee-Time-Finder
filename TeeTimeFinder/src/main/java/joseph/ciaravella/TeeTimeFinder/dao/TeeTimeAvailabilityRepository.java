@@ -23,13 +23,17 @@ public interface TeeTimeAvailabilityRepository extends CrudRepository<TeeTimeAva
             "(:timeLow is null or t.time >= :timeLow) and " +
             "(:timeHigh is null or t.time <= :timeHigh) and " +
             "(:dateLow is null or t.date >= :dateLow) and " +
-            "(:dateHigh is null or t.date <= :dateHigh)")
+            "(:dateHigh is null or t.date <= :dateHigh) and " +
+            "(:club is null or LOWER(t.clubName) = LOWER(:club)) and " +
+            "(:course is null or LOWER(t.clubName) = LOWER(:course))")
 
     Optional<List<TeeTimeAvailability>> findByFilters(
         @Param("golfers") Integer numOfGolfers,
         @Param("timeLow") Time timeLow,
         @Param("timeHigh") Time timeHigh,
         @Param("dateLow") Date dateLow,
-        @Param("dateHigh") Date dateHigh
+        @Param("dateHigh") Date dateHigh,
+        @Param("club") String club,
+        @Param("course") String course
     );
 }
