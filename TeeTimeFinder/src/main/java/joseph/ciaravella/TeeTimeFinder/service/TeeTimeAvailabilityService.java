@@ -74,24 +74,25 @@ public class TeeTimeAvailabilityService {
     }
     
     @Transactional
-    public void updateTeeTimeAvailability(Integer newNumOfGolfers, String aUserToken, Integer aId) {
-        UserAccount foundUser = userAccountRepository.findUserByToken(aUserToken).orElse(null);
-        if (foundUser == null) {
-            throw new IllegalArgumentException("User not found!");
-        }
+    // public void updateTeeTimeAvailability(Integer newNumOfGolfers, String aUserToken, Integer aId) {
+    public void updateTeeTimeAvailability(Integer newNumOfGolfers, Integer aId) {
+        // UserAccount foundUser = userAccountRepository.findUserByToken(aUserToken).orElse(null);
+        // if (foundUser == null) {
+        //     throw new IllegalArgumentException("User not found!");
+        // }
 
-        if (!foundUser.getUserType().equals("COURSE ADMIN")) {
-            throw new IllegalArgumentException("Only course admins can create tee time availabilities!");
-        }
+        // if (!foundUser.getUserType().equals("COURSE ADMIN")) {
+        //     throw new IllegalArgumentException("Only course admins can update tee time availabilities!");
+        // }
 
-        CourseAdminAccount courseAdmin = (CourseAdminAccount) foundUser;
+        // CourseAdminAccount courseAdmin = (CourseAdminAccount) foundUser;
 
         TeeTimeAvailability teeTime = teeTimeAvailabilityRepository.findById(aId).orElse(null);
 
-        // do i need this??
-        if (!courseAdmin.getId().equals(teeTime.getCourseAdminAccount().getId())) {
-            throw new IllegalArgumentException("Only the creator of this tee time availability can modify it");
-        }
+        // // do i need this??
+        // if (!courseAdmin.getId().equals(teeTime.getCourseAdminAccount().getId())) {
+        //     throw new IllegalArgumentException("Only the creator of this tee time availability can modify it");
+        // }
 
         if (newNumOfGolfers < 0) {
             throw new IllegalArgumentException("The number of golfers cannot be less than 0!");
