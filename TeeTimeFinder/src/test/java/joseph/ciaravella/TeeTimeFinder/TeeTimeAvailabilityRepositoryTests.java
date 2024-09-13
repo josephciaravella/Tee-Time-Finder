@@ -112,16 +112,18 @@ public class TeeTimeAvailabilityRepositoryTests {
         Time time = Time.valueOf("10:00:00");
         String clubName = testCourseAdmin.getAssociatedClub();
         String courseName = "Course 1";
-        Integer numOfGolfers = 4;
+        Integer numOfGolfers1 = 4;
 
-        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(clubName, courseName, date, time, numOfGolfers, testCourseAdmin);
+        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(clubName, courseName, date, time, numOfGolfers1, testCourseAdmin);
 
         teeTimeAvailabilityRepository.save(testTeeTimeAvailability);
 
         CustomerAccount testCustomer = new CustomerAccount("joseph@gmail.com", "obama");
         customerAccountRepository.save(testCustomer);
 
-        Booking testBooking = new Booking(Date.valueOf(LocalDate.now()), testCustomer, testTeeTimeAvailability);
+        Integer numOfGolfers2 = 2;
+
+        Booking testBooking = new Booking(Date.valueOf(LocalDate.now()), testCustomer, testTeeTimeAvailability, numOfGolfers2);
         bookingRepository.save(testBooking);
 
         Integer generatedTeeTimeAvailabilityID = testTeeTimeAvailability.getId();

@@ -14,6 +14,7 @@ public class Booking
   @EmbeddedId
   private BookingId id;
   private Date bookingDate;
+  private Integer numOfGolfers;
 
   //Booking Associations
   @ManyToOne
@@ -28,11 +29,12 @@ public class Booking
 
   public Booking() {}
 
-  public Booking(Date aBookingDate, CustomerAccount aCustomerAccount, TeeTimeAvailability aTeeTimeAvailability)
+  public Booking(Date aBookingDate, CustomerAccount aCustomerAccount, TeeTimeAvailability aTeeTimeAvailability, Integer aNumOfGolfers)
   {
     this.bookingDate = aBookingDate;
     this.customerAccount = aCustomerAccount;
     this.teeTimeAvailability = aTeeTimeAvailability;
+    this.numOfGolfers = aNumOfGolfers;
     this.id = new BookingId(aCustomerAccount.getId(), aTeeTimeAvailability.getId());
 
     if (!setCustomerAccount(aCustomerAccount))
@@ -49,6 +51,8 @@ public class Booking
   public BookingId getId() { return this.id; }
 
   public Date getBookingDate() { return this.bookingDate; }
+
+  public Integer getNumOfGolfers() { return this.numOfGolfers; }
 
   public CustomerAccount getCustomerAccount() { return this.customerAccount; }
   
@@ -67,6 +71,13 @@ public class Booking
   {
     boolean wasSet = false;
     this.bookingDate = aBookingDate;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setNumOfGolfers(Integer aNumOfGolfers) {
+    boolean wasSet = false;
+    this.numOfGolfers = aNumOfGolfers;
     wasSet = true;
     return wasSet;
   }

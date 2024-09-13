@@ -57,15 +57,16 @@ public class BookingRepositoryTests {
         Time testTime = Time.valueOf("8:30:00");
         String testClubName = testCourseAdmin.getAssociatedClub();
         String testCourseName = "Course 2";
-        Integer testNumOfGolfers = 2;
-        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(testClubName, testCourseName, testDate, testTime, testNumOfGolfers, testCourseAdmin);
+        Integer testNumOfGolfers1 = 2;
+        TeeTimeAvailability testTeeTimeAvailability = new TeeTimeAvailability(testClubName, testCourseName, testDate, testTime, testNumOfGolfers1, testCourseAdmin);
         teeTimeAvailabilityRepository.save(testTeeTimeAvailability);
 
         CustomerAccount testCustomer = new CustomerAccount("arex@liu.com", "herro i hungly");
         customerAccountRepository.save(testCustomer);
 
         Date testDate2 = Date.valueOf(LocalDate.now());
-        Booking testBooking = new Booking(testDate2, testCustomer, testTeeTimeAvailability);
+        Integer testNumOfGolfers2 = 2;
+        Booking testBooking = new Booking(testDate2, testCustomer, testTeeTimeAvailability, testNumOfGolfers2);
         bookingRepository.save(testBooking);
         BookingId testBookingID = testBooking.getId();
 

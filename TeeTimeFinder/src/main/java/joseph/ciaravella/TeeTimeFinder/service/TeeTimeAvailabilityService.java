@@ -54,8 +54,8 @@ public class TeeTimeAvailabilityService {
             throw new IllegalArgumentException("You must specify for which course this tee time is available");
         }
 
-        if (aNumOfGolfers < 0) {
-            throw new IllegalArgumentException("The number of golfers cannot be less than 0!");
+        if (aNumOfGolfers <= 0) {
+            throw new IllegalArgumentException("The number of golfers cannot be less than or equal to 0!");
         }
 
         if (aNumOfGolfers > 4) {
