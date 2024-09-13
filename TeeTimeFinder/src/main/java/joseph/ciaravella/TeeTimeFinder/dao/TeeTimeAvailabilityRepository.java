@@ -19,7 +19,7 @@ public interface TeeTimeAvailabilityRepository extends CrudRepository<TeeTimeAva
     Optional<List<TeeTimeAvailability>> findByNumOfGolfers(Integer numOfGolfers);
 
     @Query("SELECT t FROM TeeTimeAvailability t WHERE " +
-            "(:golfers is null or t.numOfGolfers <= :golfers) and " +
+            "(:golfers is null or t.numOfGolfers >= :golfers) and " +
             "(:timeLow is null or t.time >= :timeLow) and " +
             "(:timeHigh is null or t.time <= :timeHigh) and " +
             "(:dateLow is null or t.date >= :dateLow) and " +
