@@ -113,7 +113,7 @@ public class UserAccountService {
         userAccountRepository.save(user);
     }
 
-    // for updating administrator account
+    // for updating customer & course admin from administrator account
     @Transactional
     public UserAccountDTO updateUserAccount(String token, String oldEmail, String newEmail, String newPassword) {
         UserAccount user = getUserByEmail(token, newEmail);
