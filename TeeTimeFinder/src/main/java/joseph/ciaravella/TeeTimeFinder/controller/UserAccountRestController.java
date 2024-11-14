@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import joseph.ciaravella.TeeTimeFinder.dto.CourseAdminAccount.CourseAdminAccountCO;
 import joseph.ciaravella.TeeTimeFinder.dto.UserAccount.CourseAdminDTO;
@@ -22,12 +23,18 @@ import joseph.ciaravella.TeeTimeFinder.model.UserAccount;
 import joseph.ciaravella.TeeTimeFinder.service.UserAccountService;
 
 @CrossOrigin(origins = "*")
+@RestController
 public class UserAccountRestController {
     
     @Autowired
     private UserAccountService userAccountService;
     
-    @PostMapping(value = {"/account/createCustomer"})
+    @GetMapping("/test")
+    public String test() {
+        return "endpoint reached";
+    }
+    
+    @PostMapping("/account/createCustomer")
     public ResponseEntity<?> createCustomerAccount(@RequestBody UserAccountCO userAccountCO) {
         try {
             String email = userAccountCO.getEmail();

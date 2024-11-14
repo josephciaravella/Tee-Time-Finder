@@ -1,6 +1,9 @@
 package joseph.ciaravella.TeeTimeFinder.dto.UserAccount;
 
+import org.springframework.lang.Nullable;
+
 public class UserAccountCO {
+    @Nullable
     public String type;
     private String email;
     private String password;
