@@ -99,11 +99,13 @@ public class UserAccountService {
         }
 
         if (!newEmail.equals(user.getEmail())) {
+            System.out.println("New email: " + newEmail);
             UserAccount checkExistingUser = userAccountRepository.findUserByEmail(newEmail).orElse(null);
-            String checkExistingUserToken = checkExistingUser.getToken();
-
-            if (checkExistingUserToken == null || !checkExistingUserToken.equals(user.getToken())) {
-                throw new IllegalArgumentException("Email already in use!");
+            if (checkExistingUser != null) {
+                String checkExistingUserToken = checkExistingUser.getToken();
+                if (checkExistingUserToken == null || !checkExistingUserToken.equals(user.getToken())) {
+                    throw new IllegalArgumentException("Email already in use by someone else!");
+                }
             }
         }
 

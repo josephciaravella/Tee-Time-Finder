@@ -28,11 +28,7 @@ public class UserAccountRestController {
     
     @Autowired
     private UserAccountService userAccountService;
-    
-    @GetMapping("/test")
-    public String test() {
-        return "endpoint reached";
-    }
+
     
     @PostMapping("/account/createCustomer")
     public ResponseEntity<?> createCustomerAccount(@RequestBody UserAccountCO userAccountCO) {
