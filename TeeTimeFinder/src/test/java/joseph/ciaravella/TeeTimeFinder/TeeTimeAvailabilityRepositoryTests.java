@@ -18,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import joseph.ciaravella.TeeTimeFinder.dao.BookingRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.CourseAdminAccountRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.CustomerAccountRepository;
-import joseph.ciaravella.TeeTimeFinder.dao.TeeTimeAvailabilityRepository;
+import joseph.ciaravella.TeeTimeFinder.dao.Booking.BookingRepository;
+import joseph.ciaravella.TeeTimeFinder.dao.TeeTimeAvailability.TeeTimeAvailabilityRepository;
 import joseph.ciaravella.TeeTimeFinder.model.Booking;
 import joseph.ciaravella.TeeTimeFinder.model.CourseAdminAccount;
 import joseph.ciaravella.TeeTimeFinder.model.CustomerAccount;

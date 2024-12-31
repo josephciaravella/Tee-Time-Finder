@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import joseph.ciaravella.TeeTimeFinder.dao.CourseAdminAccountRepository;
-import joseph.ciaravella.TeeTimeFinder.dao.TeeTimeAvailabilityRepository;
 import joseph.ciaravella.TeeTimeFinder.dao.UserAccountRepository;
+import joseph.ciaravella.TeeTimeFinder.dao.TeeTimeAvailability.TeeTimeAvailabilityRepository;
 import joseph.ciaravella.TeeTimeFinder.model.CourseAdminAccount;
 import joseph.ciaravella.TeeTimeFinder.model.TeeTimeAvailability;
 import joseph.ciaravella.TeeTimeFinder.model.UserAccount;
@@ -31,7 +31,7 @@ public class TeeTimeAvailabilityService {
     CourseAdminAccountRepository courseAdminAccountRepository;
 
     @Transactional
-    public void createTeeTimeAvailabliity(String aCourseName, Integer aNumOfGolfers, String aUserToken, Date aDate, Time aTime) {
+    public void createTeeTimeAvailability(String aCourseName, Integer aNumOfGolfers, String aUserToken, LocalDate aDate, LocalTime aTime) {
         UserAccount foundUser = userAccountRepository.findUserByToken(aUserToken).orElse(null);
         if (foundUser == null) {
             throw new IllegalArgumentException("User not found!");
@@ -43,11 +43,15 @@ public class TeeTimeAvailabilityService {
 
         CourseAdminAccount courseAdmin = (CourseAdminAccount) foundUser;
 
-        Date today = Date.valueOf(LocalDate.now());
-        Time currTime = Time.valueOf(LocalTime.now());
+        LocalDate today = LocalDate.now();
+        LocalTime currTime = LocalTime.now();
 
-        if (aDate.before(today) || aTime.before(currTime)) {
-            throw new IllegalArgumentException("This date and/or time has already passed!");
+        if (aDate == null || aTime == null) {
+            throw new IllegalArgumentException("You must specify a date and time for this tee time availability!");
+        }
+
+        if (aDate.isBefore(today) && aTime.isBefore(currTime)) {
+            throw new IllegalArgumentException("This date and time has already passed!");
         }
 
         if (aCourseName.trim().isEmpty()) {
@@ -66,40 +70,24 @@ public class TeeTimeAvailabilityService {
         teeTime.setClubName(courseAdmin.getAssociatedClub());
         teeTime.setCourseAdminAccount(courseAdmin);
         teeTime.setCourseName(aCourseName);
-        teeTime.setDate(aDate);
-        teeTime.setTime(aTime);
+        teeTime.setDate(Date.valueOf(aDate));
+        teeTime.setTime(Time.valueOf(aTime));
         teeTime.setNumOfGolfers(aNumOfGolfers);
 
         teeTimeAvailabilityRepository.save(teeTime);
     }
     
     @Transactional
-    // public void updateTeeTimeAvailability(Integer newNumOfGolfers, String aUserToken, Integer aId) {
     public void updateTeeTimeAvailability(Integer newNumOfGolfers, Integer aId) {
-        // UserAccount foundUser = userAccountRepository.findUserByToken(aUserToken).orElse(null);
-        // if (foundUser == null) {
-        //     throw new IllegalArgumentException("User not found!");
-        // }
-
-        // if (!foundUser.getUserType().equals("COURSE ADMIN")) {
-        //     throw new IllegalArgumentException("Only course admins can update tee time availabilities!");
-        // }
-
-        // CourseAdminAccount courseAdmin = (CourseAdminAccount) foundUser;
 
         TeeTimeAvailability teeTime = teeTimeAvailabilityRepository.findById(aId).orElse(null);
-
-        // // do i need this??
-        // if (!courseAdmin.getId().equals(teeTime.getCourseAdminAccount().getId())) {
-        //     throw new IllegalArgumentException("Only the creator of this tee time availability can modify it");
-        // }
 
         if (newNumOfGolfers < 0) {
             throw new IllegalArgumentException("The number of golfers cannot be less than 0!");
         }
 
-        if (newNumOfGolfers >= teeTime.getNumOfGolfers()) {
-            throw new IllegalArgumentException("The new number of golfers permitted must be less than the current number of golfers permitted!");
+        if (newNumOfGolfers > 4) {
+            throw new IllegalArgumentException("The new number of golfers permitted must be less than 4!");
         }
 
         teeTime.setNumOfGolfers(newNumOfGolfers);
