@@ -87,7 +87,7 @@ public class UserAccountService {
         UserAccount user = userAccountRepository.findUserByToken(token).orElse(null);
 
         if (user == null) {
-            throw new IllegalArgumentException("No user was found with this email!");
+            throw new IllegalArgumentException("No user was found with this token!");
         }
 
         if (newEmail.trim().isEmpty()) {
@@ -118,7 +118,7 @@ public class UserAccountService {
     // for updating customer & course admin from administrator account
     @Transactional
     public UserAccountDTO updateUserAccount(String token, String oldEmail, String newEmail, String newPassword) {
-        UserAccount user = getUserByEmail(token, newEmail);
+        UserAccount user = getUserByEmail(token, oldEmail);
 
         if (user == null) {
             throw new IllegalArgumentException("No user was found with this email!");

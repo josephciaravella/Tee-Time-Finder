@@ -1,4 +1,4 @@
-package joseph.ciaravella.TeeTimeFinder.dto.CourseAdminAccount;
+package joseph.ciaravella.TeeTimeFinder.dto.UserAccount.CourseAdminAccount;
 
 public class CourseAdminAccountDTO {
         

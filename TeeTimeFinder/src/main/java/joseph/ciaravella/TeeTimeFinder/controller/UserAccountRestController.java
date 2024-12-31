@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import joseph.ciaravella.TeeTimeFinder.dto.CourseAdminAccount.CourseAdminAccountCO;
 import joseph.ciaravella.TeeTimeFinder.dto.UserAccount.CourseAdminDTO;
 import joseph.ciaravella.TeeTimeFinder.dto.UserAccount.UserAccountCO;
 import joseph.ciaravella.TeeTimeFinder.dto.UserAccount.UserAccountDTO;
+import joseph.ciaravella.TeeTimeFinder.dto.UserAccount.CourseAdminAccount.CourseAdminAccountCO;
 import joseph.ciaravella.TeeTimeFinder.model.UserAccount;
 import joseph.ciaravella.TeeTimeFinder.service.UserAccountService;
 
@@ -58,7 +58,7 @@ public class UserAccountRestController {
     }
     
     //customer & course admin account update
-    @PutMapping(value = {"/accounts/update"})
+    @PutMapping(value = {"/account/update"})
     public ResponseEntity<?> updateAccount(@RequestHeader String userToken, @RequestBody UserAccountCO userAccountCO) {
         try {
             String email = userAccountCO.getEmail();
