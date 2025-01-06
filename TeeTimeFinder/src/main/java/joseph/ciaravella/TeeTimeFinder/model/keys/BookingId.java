@@ -23,5 +23,5 @@ public class BookingId implements Serializable {
     }
 
     public Integer getCustomerAccountId() { return customerAccountId; }
-    public Integer getteeTimeAvailabilityId() { return teeTimeAvailabilityId; }
+    public Integer getTeeTimeAvailabilityId() { return teeTimeAvailabilityId; }
 }
