@@ -1,12 +1,17 @@
 package joseph.ciaravella.TeeTimeFinder.model;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "userAccounts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE")
-public class UserAccount {
+public abstract class UserAccount implements UserDetails{
 
   //UserAccount Attributes
   private String email;
@@ -15,6 +20,44 @@ public class UserAccount {
   @Id
   @GeneratedValue
   private Integer id;
+
+
+
+  
+
+  // UserDetails implementation
+  @Override
+  public String getUsername() {
+      return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+      return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+      return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+      return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+      return true;
+  }
+
+  // Each subclass will implement getAuthorities()
+  @Override
+  public abstract Collection<? extends GrantedAuthority> getAuthorities();
+
+
+
+
 
   public UserAccount() {}
 

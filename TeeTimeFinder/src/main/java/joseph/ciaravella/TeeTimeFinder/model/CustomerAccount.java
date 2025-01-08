@@ -16,7 +16,7 @@ public class CustomerAccount extends UserAccount
   public CustomerAccount() { super(); }
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
   }
 
   public CustomerAccount(String aEmail, String aPassword)
