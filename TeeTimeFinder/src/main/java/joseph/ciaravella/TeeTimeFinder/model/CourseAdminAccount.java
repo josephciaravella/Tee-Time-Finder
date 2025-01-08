@@ -16,7 +16,7 @@ public class CourseAdminAccount extends UserAccount
   private String associatedClub;
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_COURSE ADMIN"));
   }
 
   public CourseAdminAccount() { super(); }

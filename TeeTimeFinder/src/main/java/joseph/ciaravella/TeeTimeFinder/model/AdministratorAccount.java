@@ -14,7 +14,7 @@ import jakarta.persistence.Entity;
 public class AdministratorAccount extends UserAccount{
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ADMIN"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
     public AdministratorAccount() {
         super();
