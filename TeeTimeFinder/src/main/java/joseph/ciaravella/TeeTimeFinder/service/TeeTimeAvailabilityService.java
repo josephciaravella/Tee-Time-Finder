@@ -78,8 +78,21 @@ public class TeeTimeAvailabilityService {
     }
     
     @Transactional
-    public void updateTeeTimeAvailability(Integer newNumOfGolfers, Integer aId) {
+    public void updateTeeTimeAvailability(String userToken, Integer newNumOfGolfers, Integer aId, Boolean intentionalAPI) {
 
+        UserAccount foundUser = Utilities.getUserWithToken(userAccountRepository, userToken);
+
+        if (foundUser == null) {
+            throw new IllegalArgumentException("User not found!");
+        }
+
+        if (foundUser.getUserType().equals("CUSTOMER") && intentionalAPI) {
+            throw new IllegalArgumentException("Only course admins can update tee time availabilities!");
+        }
+
+        if (!foundUser.getUserType().equals("CUSTOMER") && !intentionalAPI) {
+            throw new IllegalArgumentException("Non-customers do not have access this way!");
+        }
         TeeTimeAvailability teeTime = teeTimeAvailabilityRepository.findById(aId).orElse(null);
 
         if (newNumOfGolfers < 0) {

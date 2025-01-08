@@ -35,7 +35,7 @@ public class TeeTimeAvailabilityRestController {
     
     
     // create tee time availability
-    @PostMapping("/teeTimes/createTeeTimeAvailability")
+    @PostMapping("/teeTime/createTeeTimeAvailability")
     public ResponseEntity<?> createTeeTimeAvailability(@RequestHeader String userToken, @RequestBody TeeTimeAvailabilityCO teeTimeAvailabilityCO) {
         try {
             if (teeTimeAvailabilityCO.getTimestamp() == null) {
@@ -52,10 +52,10 @@ public class TeeTimeAvailabilityRestController {
 
 
     // update tee time availability - num of golfers changed
-    @PutMapping("/teeTimes/updateTeeTimeAvailability")
-    public ResponseEntity<?> updateTeeTimeAvailability(@RequestParam Integer newNumOfGolfers, @RequestHeader Integer teeTimeID) {
+    @PutMapping("/teeTime/updateTeeTimeAvailability")
+    public ResponseEntity<?> updateTeeTimeAvailability(@RequestHeader String userToken, @RequestParam Integer newNumOfGolfers, @RequestHeader Integer teeTimeID) {
         try {
-            teeTimeAvailabilityService.updateTeeTimeAvailability(newNumOfGolfers, teeTimeID);
+            teeTimeAvailabilityService.updateTeeTimeAvailability(userToken, newNumOfGolfers, teeTimeID, true);
             return ResponseEntity.status(HttpStatus.OK).body("Tee time availability updated successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -77,7 +77,7 @@ public class TeeTimeAvailabilityRestController {
     }
 
     // get list of tee time availabilities
-    @GetMapping("/teeTimes/getAllTeeTimeAvailabilities")
+    @GetMapping("/public/teeTimes/getAllTeeTimeAvailabilities")
     public ResponseEntity<?> getTeeTimeAvailabilities(
         @RequestParam(required = false) Time lowTime,
         @RequestParam(required = false) Time highTime,
@@ -98,7 +98,7 @@ public class TeeTimeAvailabilityRestController {
 
 
     // delete tee time availability
-    @DeleteMapping("/teeTimes/deleteTeeTimeAvailability")
+    @DeleteMapping("/teeTime/deleteTeeTimeAvailability")
     public ResponseEntity<?> deleteTeeTimeAvailability(@RequestHeader String userToken, @RequestHeader Integer teeTimeID) {
         try {
             teeTimeAvailabilityService.deleteTeeTimeAvailability(userToken, teeTimeID);

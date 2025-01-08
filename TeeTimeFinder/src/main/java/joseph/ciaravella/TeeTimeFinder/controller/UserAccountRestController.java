@@ -3,6 +3,7 @@ package joseph.ciaravella.TeeTimeFinder.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -44,7 +45,7 @@ public class UserAccountRestController {
     }
 
     // course admin account has an extra field we need to account for
-    @PostMapping(value = {"/accounts/createCourseAdmin"})
+    @PostMapping(value = {"/admin/accounts/createCourseAdmin"})
     public ResponseEntity<?> createCourseAdminAccount(@RequestHeader String userToken, @RequestBody CourseAdminAccountCO courseAdminAccountCO) {
         try {
             String email = courseAdminAccountCO.getEmail();
@@ -72,7 +73,7 @@ public class UserAccountRestController {
     }
 
     //update from administrator account
-    @PutMapping(value = {"/accounts/updateUserAccounts"})
+    @PutMapping(value = {"/admin/accounts/updateUserAccounts"})
     public ResponseEntity<?> updateUserAccount(@RequestHeader String userToken, @RequestParam String currEmail, @RequestBody UserAccountCO userAccountCO) {
         try {
             String email = userAccountCO.getEmail();
@@ -85,8 +86,8 @@ public class UserAccountRestController {
         }
     }
 
-    @GetMapping(value = {"/accounts/getUserAccount"})
-    public ResponseEntity<?> getUserAccount(@RequestHeader String userToken) {
+    @GetMapping(value = {"/account/getAccount"})
+    public ResponseEntity<?> getAccount(@RequestHeader String userToken) {
         try {
             UserAccount user = userAccountService.getUserByToken(userToken);
             String email = user.getEmail();
@@ -99,7 +100,7 @@ public class UserAccountRestController {
         }
     }
 
-    @GetMapping(value = {"/accounts/getCourseAdminAccounts"})
+    @GetMapping(value = {"/admin/accounts/getCourseAdminAccounts"})
     public ResponseEntity<?> getCourseAdminAccounts() {
         try {
             List<UserAccount> courseAdmins = userAccountService.getAllCourseAdmins();
@@ -111,7 +112,31 @@ public class UserAccountRestController {
         }
     }
 
-    @DeleteMapping(value = {"/accounts/deleteUserAccount"})
+    @GetMapping(value = {"/admin/accounts/getCustomerAccounts"})
+    public ResponseEntity<?> getCustomerAccounts() {
+        try {
+            List<UserAccount> customers = userAccountService.getAllCustomers();
+            // convert list of course admins to list of course admin DTOs
+            List<UserAccountDTO> customerDTOs = customers.stream().map(customer -> new UserAccountDTO(customer)).toList();
+            return ResponseEntity.ok().body(customerDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = {"/admin/accounts/getUserAccount"})
+    public ResponseEntity<?> getUserAccount(@RequestHeader String userToken, @RequestParam String email) {
+        try {
+            UserAccount user = userAccountService.getUserByEmail(userToken, email);
+            UserAccountDTO userAccountDTO = new UserAccountDTO(user);
+            return ResponseEntity.ok().body(userAccountDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+            
+
+    @DeleteMapping(value = {"/account/deleteUserAccount"})
     public ResponseEntity<?> deleteAccount(@RequestHeader String userToken, @RequestParam String email) {   
         try {
             userAccountService.deleteAccount(userToken, email);

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 // import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
@@ -124,6 +125,10 @@ public class UserAccountService {
             throw new IllegalArgumentException("No user was found with this email!");
         }
 
+        if (newEmail == null) {
+            throw new IllegalArgumentException("Email cannot be empty!");
+        }
+
         if (newEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be empty!");
         }
@@ -146,7 +151,16 @@ public class UserAccountService {
 
     @Transactional
     public UserAccount getUserByToken(String token) {
-        return userAccountRepository.findUserByToken(token).orElse(null);
+        if (token == null) {
+            throw new IllegalArgumentException("Token cannot be null!");
+        }
+        
+        UserAccount user = userAccountRepository.findUserByToken(token).orElse(null);
+        
+        if (user == null) {
+            throw new IllegalArgumentException("No user found!");
+        }
+        return user;
     }
 
     @Transactional
@@ -154,7 +168,7 @@ public class UserAccountService {
         UserAccount requester = Utilities.getUserWithToken(userAccountRepository, token);
 
         if (!requester.getUserType().equals("ADMINISTRATOR")) {
-            throw new IllegalArgumentException("Only the administrator has access to all user accounts!");
+            throw new IllegalArgumentException("Only the administrator has access to other user accounts!");
         }
         
         UserAccount user = userAccountRepository.findUserByEmail(email).orElse(null);
@@ -172,6 +186,17 @@ public class UserAccountService {
 
         if (foundUsers == null) {
         throw new IllegalArgumentException("No instructors found!");
+        }
+
+        return foundUsers;
+    }
+
+    @Transactional
+    public List<UserAccount> getAllCustomers() {
+        List<UserAccount> foundUsers = userAccountRepository.findByUserType(Collections.singletonList(CustomerAccount.class)).orElse(null);
+
+        if (foundUsers == null) {
+        throw new IllegalArgumentException("No customers found!");
         }
 
         return foundUsers;

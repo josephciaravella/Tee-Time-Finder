@@ -64,7 +64,7 @@ public class BookingRestController {
         }
     }
 
-    @GetMapping("/bookings/getAllBookingsAdmin")
+    @GetMapping("/admin/bookings/getAllBookingsAdmin")
     public ResponseEntity<?> getAllBookingsAdmin(@RequestHeader String userToken, 
         @RequestParam(required = false) String email,
         @RequestParam(required = false) Date dateLow,

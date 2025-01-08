@@ -58,7 +58,7 @@ public class BookingService {
         newBooking.setTeeTimeAvailability(foundTeeTime);
         newBooking.setNumOfGolfers(numOfGolfers);
         newBooking.setId(bookingId);
-        teeTimeAvailabilityService.updateTeeTimeAvailability(remainingSpaces, teeTimeId);
+        teeTimeAvailabilityService.updateTeeTimeAvailability(userToken, remainingSpaces, teeTimeId, false);
 
         bookingRepository.save(newBooking);
     }
@@ -202,7 +202,7 @@ public class BookingService {
         }
 
 
-        teeTimeAvailabilityService.updateTeeTimeAvailability(foundBooking.getNumOfGolfers() + foundTeeTimeAvailability.getNumOfGolfers(), id.getTeeTimeAvailabilityId());
+        teeTimeAvailabilityService.updateTeeTimeAvailability(userToken, foundBooking.getNumOfGolfers() + foundTeeTimeAvailability.getNumOfGolfers(), id.getTeeTimeAvailabilityId(), false);
         bookingRepository.delete(foundBooking);
     }
 
