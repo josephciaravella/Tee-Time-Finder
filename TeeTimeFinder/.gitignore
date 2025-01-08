@@ -5,7 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/src/main/java/joseph/ciaravella/TeeTimeFinder/security/*
-**/src/main/resources/application.properties
+**/src/main/resources/*
 
 ### STS ###
 .apt_generated
