@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-TeeTimeFinder/src/main/java/joseph/ciaravella/TeeTimeFinder/security
+TeeTimeFinder/src/main/java/joseph/ciaravella/TeeTimeFinder/security/
 
 ### STS ###
 .apt_generated
