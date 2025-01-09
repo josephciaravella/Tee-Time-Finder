@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-// import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -21,6 +20,12 @@ public class UserAccountService {
 
     @Autowired
     UserAccountRepository userAccountRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationService authenticationService;
 
     @Transactional
     public void createCustomerAccount(String aEmail, String aPassword) {
@@ -42,7 +47,7 @@ public class UserAccountService {
         CustomerAccount customerAccount = new CustomerAccount();
 
         customerAccount.setEmail(aEmail);
-        customerAccount.setPassword(aPassword);
+        customerAccount.setPassword(passwordEncoder.encode(aPassword));
 
         userAccountRepository.save(customerAccount);
     }
@@ -50,6 +55,7 @@ public class UserAccountService {
     @Transactional
     public UserAccountDTO createCourseAdminAccount(String token, String aEmail, String aPassword, String aAssociatedClub) {
         UserAccount user = Utilities.getUserWithToken(userAccountRepository, token);
+        authenticationService.validateUserTypeAndAuthorities(user);
         if (!user.getUserType().equals("ADMINISTRATOR")) {
             throw new IllegalArgumentException("Only the administrator can create course admin accounts!");
         }
@@ -75,7 +81,7 @@ public class UserAccountService {
         CourseAdminAccount courseAdminAccount = new CourseAdminAccount();
 
         courseAdminAccount.setEmail(aEmail);
-        courseAdminAccount.setPassword(aPassword);
+        courseAdminAccount.setPassword(passwordEncoder.encode(aPassword));
         courseAdminAccount.setAssociatedClub(aAssociatedClub);
 
         userAccountRepository.save(courseAdminAccount);
@@ -111,7 +117,7 @@ public class UserAccountService {
         }
 
         user.setEmail(newEmail);
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         userAccountRepository.save(user);
     }
@@ -120,9 +126,14 @@ public class UserAccountService {
     @Transactional
     public UserAccountDTO updateUserAccount(String token, String oldEmail, String newEmail, String newPassword) {
         UserAccount user = getUserByEmail(token, oldEmail);
+        authenticationService.validateUserTypeAndAuthorities(user);
 
         if (user == null) {
             throw new IllegalArgumentException("No user was found with this email!");
+        }
+        
+        if (!user.getUserType().equals("ADMINISTRATOR")) {
+            throw new IllegalArgumentException("Only the administrator can update user accounts!");
         }
 
         if (newEmail == null) {
@@ -144,7 +155,7 @@ public class UserAccountService {
         }
 
         user.setEmail(newEmail);
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         return convertToDto(user);
     }
@@ -166,6 +177,7 @@ public class UserAccountService {
     @Transactional
     public UserAccount getUserByEmail(String token, String email) {
         UserAccount requester = Utilities.getUserWithToken(userAccountRepository, token);
+        authenticationService.validateUserTypeAndAuthorities(requester);
 
         if (!requester.getUserType().equals("ADMINISTRATOR")) {
             throw new IllegalArgumentException("Only the administrator has access to other user accounts!");
@@ -205,6 +217,7 @@ public class UserAccountService {
     @Transactional
     public void deleteAccount(String token, String email) {
         UserAccount user = Utilities.getUserWithToken(userAccountRepository, token);
+        authenticationService.validateUserTypeAndAuthorities(user);
         if (!user.getUserType().equals("ADMINISTRATOR") && !user.getEmail().equals(email)) {
             throw new IllegalArgumentException("Only the person to which this account belongs and the administrator can delete this account!");
         }

@@ -1,56 +1,101 @@
 package joseph.ciaravella.TeeTimeFinder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import joseph.ciaravella.TeeTimeFinder.dao.UserAccountRepository;
+import joseph.ciaravella.TeeTimeFinder.dto.Authentication.AuthenticationCO;
 import joseph.ciaravella.TeeTimeFinder.dto.Authentication.AuthenticationDTO;
 import joseph.ciaravella.TeeTimeFinder.model.UserAccount;
-import joseph.ciaravella.TeeTimeFinder.utilities.TokenProvider;
+import joseph.ciaravella.TeeTimeFinder.security.JwtService;
+import joseph.ciaravella.TeeTimeFinder.utilities.Utilities;
 
 @Service
 public class AuthenticationService {
     
     @Autowired
-    private TokenProvider tokenProvider;
-    
+    PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserAccountRepository userAccountRepository;
+    UserAccountRepository userAccountRepository;
+
+    @Autowired
+    JwtService jwtService;
 
     @Transactional
-    public AuthenticationDTO login(String email, String password) {
-        UserAccount existingUser = userAccountRepository.findUserByEmail(email).orElse(null);
+    public AuthenticationDTO login(AuthenticationCO authenticationCO) {
+        String email = authenticationCO.getEmail();
+        String rawPassword = authenticationCO.getPassword();
 
-        if (existingUser == null) {
-            throw new IllegalArgumentException("You must make an account before attempting to login!");
+        if (email.trim().isEmpty() || rawPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email or password cannot be empty!");
         }
 
-        if (!existingUser.getPassword().equals(password)) {
+        UserAccount user = userAccountRepository.findUserByEmail(email).orElseThrow(
+            () -> new IllegalArgumentException("User not found, please create an account!"));
+
+        if (!verifyPassword(rawPassword, user.getPassword())) {
             throw new IllegalArgumentException("Incorrect password!");
         }
 
-        String generatedToken = tokenProvider.generateToken(email);
-        existingUser.setToken(generatedToken);
-        userAccountRepository.save(existingUser);
+        validateUserTypeAndAuthorities(user);
 
-        AuthenticationDTO authenticated = new AuthenticationDTO();
-        authenticated.setEmail(existingUser.getEmail());
-        authenticated.setToken(existingUser.getToken());
-        authenticated.setRole(existingUser.getUserType());
+        String token = jwtService.generateToken(user);
+        user.setToken(token);
+        userAccountRepository.save(user);
 
-        return authenticated;
+        return new AuthenticationDTO(email, token, user.getUserType());
     }
-
+    
     @Transactional
     public void logout(String token) {
-      UserAccount existingUser = userAccountRepository.findUserByToken(token).orElse(null);
-  
-      if (existingUser == null) {
-        throw new IllegalArgumentException("User not found");
-      }
-  
-      existingUser.setToken(null);
-      userAccountRepository.save(existingUser);
+        UserAccount user = Utilities.getUserWithToken(userAccountRepository, token);
+        
+        if (user == null) {
+            throw new IllegalArgumentException("User not found!");
+        }
+            
+        user.setToken(null);
+        userAccountRepository.save(user);
+    }
+
+
+    // helper methods
+
+    public boolean verifyPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public void validateUserTypeAndAuthorities(UserAccount user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User not found!");
+        }
+
+        String userType = user.getUserType();
+        String authority = user.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElse("");
+
+        switch (userType) {
+            case "ADMINISTRATOR":
+                if (!authority.equals("ROLE_ADMIN")) {
+                    throw new IllegalStateException("Administrator account does not have the correct authorities!");
+                }
+                break;
+            case "COURSE_ADMIN":
+                if (!authority.equals("ROLE_COURSE_ADMIN")) {
+                    throw new IllegalStateException("Course admin account does not have the correct authorities!");
+                }
+                break;
+            case "CUSTOMER":
+                if (!authority.equals("ROLE_CUSTOMER")) {
+                    throw new IllegalStateException("Customer account does not have the correct authorities!");
+                }
+                break;
+        
+            default:
+                throw new IllegalStateException("Unknown user type: " + userType);
+        }
     }
 }
