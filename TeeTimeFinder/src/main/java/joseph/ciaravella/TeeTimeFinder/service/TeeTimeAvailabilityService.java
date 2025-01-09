@@ -37,7 +37,7 @@ public class TeeTimeAvailabilityService {
             throw new IllegalArgumentException("User not found!");
         }
 
-        if (!foundUser.getUserType().equals("COURSE ADMIN")) {
+        if (!foundUser.getUserType().equals("COURSE_ADMIN")) {
             throw new IllegalArgumentException("Only course admins can create tee time availabilities!");
         }
 

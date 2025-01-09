@@ -9,14 +9,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("COURSE ADMIN")
+@DiscriminatorValue("COURSE_ADMIN")
 public class CourseAdminAccount extends UserAccount
 {
 
   private String associatedClub;
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_COURSE ADMIN"));
+    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_COURSE_ADMIN"));
   }
 
   public CourseAdminAccount() { super(); }
